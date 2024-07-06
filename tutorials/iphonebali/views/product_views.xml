@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="product_action" model="ir.actions.act_window">
+        <field name="name">Product action</field>
+        <field name="res_model">product</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="iphonebali_menu_root" name="Iphonebali">
+        <menuitem id="product_first_level_menu" name="Product" action="product_action" />
+    </menuitem>
+</odoo>
+
+
