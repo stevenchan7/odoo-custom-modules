@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="product_type_action" model="ir.actions.act_window">
+        <field name="name">product_type.action</field>
+        <field name="res_model">product.type</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem
+        id="setting_first_level_menu"
+        name="Settings"
+        parent="iphonebali_menu_root"
+    >
+        <menuitem
+            id="product_type_submenu"
+            name="Product type"
+            action="product_type_action"
+        />
+    </menuitem>
+
+</odoo>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <record id="product_action" model="ir.actions.act_window">
-        <field name="name">Product action</field>
+        <field name="name">product.action</field>
         <field name="res_model">product</field>
         <field name="view_mode">tree,form</field>
     </record>
@@ -9,6 +9,110 @@
     <menuitem id="iphonebali_menu_root" name="Iphonebali">
         <menuitem id="product_first_level_menu" name="Product" action="product_action" />
     </menuitem>
+
+    <record id="product_view_search" model="ir.ui.view">
+        <field name="name">product.view.search</field>
+        <field name="model">product</field>
+        <field name="arch" type="xml">
+            <search string="Tests">
+                <field name="name" />
+                <field name="sku" />
+                <field name="expected_price" />
+                <field name="processor" />
+                <field name="memory" />
+                <field name="storage" />
+                <field name="battery_capacity" />
+                <filter name="memory" string="Memory" context="{'group_by':'memory'}" /> 
+                <filter name="storage" string="Storage" context="{'group_by':'storage'}" /> 
+                <filter name="product_type_id" string="Product type" context="{'group_by':'product_type_id'}" /> 
+                <filter name="inactive" string="Inactive" domain="[('active', '=', False)]" /> 
+                <filter name="available" string="Available" domain="['|', ('state', '=', 'new'), ('state', '=', 'offer_received')]" /> 
+            </search>
+        </field>
+    </record>
+
+    <record id="product_view_tree" model="ir.ui.view">
+        <field name="name">product.view.tree</field>
+        <field name="model">product</field>
+        <field name="arch" type="xml">
+            <tree string="Channel">
+                <field name="name" />
+                <field name="sku" />
+                <field name="date_availability" />
+                <field name="expected_price" />
+                <field name="state" />
+                <field name="product_type_id" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="product_view_form" model="ir.ui.view">
+        <field name="name">product.view.form</field>
+        <field name="model">product</field>
+        <field name="arch" type="xml">
+            <form string="Channel">
+                <header>
+                    <button string="Sold" name="sold_product" type="object" class="oe_highlight"/>
+                    <button string="Cancel" name="cancel_product" type="object" class="oe_highlight"/>
+                </header>
+                <sheet>
+                    <div class="oe_title mb32">
+                        <div class="oe_edit_only">
+                            <label for="name"/>
+                        </div>
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                        <field name="product_tag_ids" widget="many2many_tags" options="{'no_create_edit': True, 'no_quick_create': True}" />
+                    </div>
+                    <group>
+                        <group>
+                            <field name="state" string="Status" />
+                            <field name="sku" />
+                            <field name="create_date" string="Date Available" />
+                            <field name="product_type_id" string="Product Type" />
+                        </group>
+                        <group>
+                            <field name="expected_price" />
+                            <field name="best_price" string='Best Offer' />
+                            <field name="selling_price" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description">
+                            <group>
+                                <field name="description" />
+                                <field name="processor" />
+                                <field name="memory" />
+                                <field name="storage" />
+                                <field name="battery_capacity" />
+                                <field name="refresh_rate" />
+                                <field name="camera_pixel" />
+                                <field name="active" />
+                            </group>
+                        </page>
+                        <page string="Other info">
+                            <group>
+                                <field name="buyer" />
+                                <field name="sales_person" string="Sales Person" />
+                            </group>
+                        </page>
+                        <page string="Offers">
+                            <field name="product_offer_ids">
+                                <tree>
+                                    <field name="price" />
+                                    <field name="partner_id" />
+                                    <field name="validity" />
+                                    <field name="date_deadline" />
+                                    <button string="Accept" icon="fa-check" name="accept_offer" type="object" class="oe_highlight"/>
+                                    <button string="Refuse" icon="fa-times" name="refuse_offer" type="object" class="oe_highlight"/>
+                                    <field name="status" />
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
 </odoo>
-
-

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="product_tag_action" model="ir.actions.act_window">
+        <field name="name">product_tag.action</field>
+        <field name="res_model">product.tag</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem
+        id="=product_tag_submenu"
+        name="Product tag"
+        action="product_tag_action"
+        parent="setting_first_level_menu"
+    />
+
+</odoo>
