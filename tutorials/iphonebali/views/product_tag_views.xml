@@ -3,7 +3,7 @@
 
     <record id="product_tag_action" model="ir.actions.act_window">
         <field name="name">product_tag.action</field>
-        <field name="res_model">product.tag</field>
+        <field name="res_model">iphonebali.product.tag</field>
         <field name="view_mode">tree,form</field>
     </record>
 

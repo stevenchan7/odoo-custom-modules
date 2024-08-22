@@ -54,6 +54,7 @@
                 <header>
                     <button string="Sold" name="sold_product" type="object" class="oe_highlight"/>
                     <button string="Cancel" name="cancel_product" type="object" class="oe_highlight"/>
+                    <field name="state" widget="statusbar" statusbar_visible="new,offer_received,offer_accepted,sold" />
                 </header>
                 <sheet>
                     <div class="oe_title mb32">
@@ -67,7 +68,6 @@
                     </div>
                     <group>
                         <group>
-                            <field name="state" string="Status" />
                             <field name="sku" />
                             <field name="create_date" string="Date Available" />
                             <field name="product_type_id" string="Product Type" />

@@ -5,7 +5,8 @@ from datetime import timedelta
 
 class Product(models.Model):
     _name = 'product'
-    _description = 'iphonebali product'
+    _description = 'Iphonebali Product'
+    _order = 'id desc'
 
     def get_availability_date(self):
         return fields.Date.today() + timedelta(days=90)
@@ -27,7 +28,7 @@ class Product(models.Model):
         ('offer_accepted', 'Offer accepted'), 
         ('sold', 'Sold'),
         ('canceled', 'Canceled')
-    ], default='new', required=True)
+    ], default='new', store=True, copy=False, compute="_compute_state")
     best_price = fields.Float(compute='_compute_best_price')
     refresh_rate = fields.Integer()
     camera_pixel = fields.Integer()
@@ -36,7 +37,7 @@ class Product(models.Model):
     product_type_id = fields.Many2one("product.type", string="Product type")
     buyer = fields.Many2one('res.partner', string='Buyer', copy=False)
     sales_person = fields.Many2one('res.users', string='Sales person', default=lambda self: self.env.user)
-    product_tag_ids = fields.Many2many('product.tag', string='Product tags')
+    product_tag_ids = fields.Many2many('iphonebali.product.tag', string='Product tags')
     product_offer_ids = fields.One2many('product.offer', 'product_id', string='Product offers')
 
     @api.depends('product_offer_ids.price')
@@ -46,6 +47,12 @@ class Product(models.Model):
                 product.best_price = max(product.product_offer_ids.mapped('price'))
             else:
                 product.best_price = 0.0
+
+    @api.depends('product_offer_ids')
+    def _compute_state(self):
+        for product in self:
+            if len(product.product_offer_ids) > 0:
+                product.state = 'offer_received'
 
     def sold_product(self):
         for product in self:
@@ -66,10 +73,12 @@ class Product(models.Model):
     @api.constrains('selling_price', 'expected_price')
     def _check_selling_price(self):
         for product in self:
-            min_selling_price = product.expected_price * 0.9
-            # selling_price is lower than min_selling_price
-            if float_compare(product.selling_price, min_selling_price, precision_rounding=0.01) == -1:
-                raise ValidationError(_('Selling price cannot be lower than 90 of expected price'))
+            # Selling price must not be zero for the constrains to be applied
+            if not float_is_zero(product.selling_price, precision_rounding=0.01):
+                min_selling_price = product.expected_price * 0.9
+                # selling_price is lower than min_selling_price
+                if float_compare(product.selling_price, min_selling_price, precision_rounding=0.01) == -1:
+                    raise ValidationError(_('Selling price cannot be lower than 90 of expected price'))
     
     _sql_constraints = [
         ('check_expected_price', 'CHECK(expected_price > 0.0)', 'Expected price must be strictly positive'),

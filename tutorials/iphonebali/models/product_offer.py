@@ -1,10 +1,11 @@
 from odoo import models, fields, api, _
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
 from datetime import timedelta
 
 class ProductOffer(models.Model):
     _name = 'product.offer'
     _description = 'Product offer'
+    _order = 'price desc'
 
     price = fields.Float(required=True)
     status = fields.Selection([
@@ -21,9 +22,7 @@ class ProductOffer(models.Model):
     def _compute_date_deadline(self):
         for offer in self:
             if offer.create_date and offer.validity:
-                offer.date_deadline = offer.create_date + timedelta(days=offer.validity)
-            else:
-                offer.date_deadline = False
+                offer.date_deadline = offer.create_date.date() + timedelta(days=offer.validity)
 
     def _inverse_date_deadline(self):
         for offer in self:
@@ -39,13 +38,14 @@ class ProductOffer(models.Model):
                 offer.status = 'accepted'
                 offer.product_id.buyer = offer.partner_id
                 offer.product_id.selling_price = offer.price
-                offer.product_id._check_selling_price()
+                offer.product_id.state = 'offer_accepted'
     
     def refuse_offer(self):
         for offer in self:
             offer.status = 'refused'
             offer.product_id.selling_price = 0.0
             offer.product_id.buyer = False
+            offer.product_id.state = 'offer_received'
 
     _sql_constraints = [
         ('check_price', 'CHECK(price > 0.0)', 'Offer price must be strictly positive')

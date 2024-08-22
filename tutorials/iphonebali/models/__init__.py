@@ -1,1 +1,1 @@
-from . import product, product_type, product_tag, product_offer
+from . import product, product_type, iphonebali_product_tag, product_offer

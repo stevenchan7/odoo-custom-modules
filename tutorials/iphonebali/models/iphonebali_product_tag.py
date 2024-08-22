@@ -1,8 +1,9 @@
 from odoo import models, fields
 
 class ProductTag(models.Model):
-    _name = 'product.tag'
-    _description = 'Product tags'
+    _name = 'iphonebali.product.tag'
+    _description = 'Iphonebali Product Tag'
+    _oder = 'name'
 
     name = fields.Char(required=True)
 

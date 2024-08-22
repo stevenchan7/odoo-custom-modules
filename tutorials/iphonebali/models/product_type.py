@@ -2,7 +2,8 @@ from odoo import models, fields
 
 class ProductType(models.Model):
     _name = 'product.type'
-    _description = 'iphonebali product type'
+    _description = 'Iphonebali Product Type'
+    _order = 'name'
 
     name = fields.Char('name', required=True)
 
